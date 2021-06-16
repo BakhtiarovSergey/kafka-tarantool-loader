@@ -1,6 +1,6 @@
 spaces:
   USER1:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -37,7 +37,7 @@ spaces:
     sharding_key:
       - ID
   EMPLOYEES:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -83,7 +83,7 @@ spaces:
     sharding_key:
       - ID
   EMPLOYEES_BAD1:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -123,7 +123,7 @@ spaces:
     sharding_key:
       - ID
   EMPLOYEES_BAD2:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -160,7 +160,7 @@ spaces:
     sharding_key:
       - ID
   EMPLOYEES_BAD3:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -209,7 +209,7 @@ spaces:
     sharding_key:
       - ID
   EMPLOYEES_HIST:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -258,7 +258,7 @@ spaces:
     sharding_key:
       - ID
   EMPLOYEES_HIST_BAD:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -301,7 +301,7 @@ spaces:
     sharding_key:
       - ID
   EMPLOYEES_HIST_BAD2:
-    engine: 'memtx'
+    engine: 'vinyl'
     is_local: false
     temporary: false
     format:
@@ -373,7 +373,7 @@ spaces:
         name: bucket_id
         type: unsigned
     temporary: false
-    engine: memtx
+    engine: vinyl
     is_local: false
     sharding_key:
       - id
@@ -435,7 +435,7 @@ spaces:
         name: bucket_id
         type: unsigned
     temporary: false
-    engine: memtx
+    engine: vinyl
     is_local: false
     sharding_key:
       - id
@@ -507,7 +507,7 @@ spaces:
         name: bucket_id
         type: unsigned
     temporary: false
-    engine: memtx
+    engine: vinyl
     is_local: false
     sharding_key:
       - id
@@ -559,7 +559,7 @@ spaces:
         name: bucket_id
         type: unsigned
     temporary: false
-    engine: memtx
+    engine: vinyl
     is_local: false
     sharding_key:
       - id
@@ -608,7 +608,7 @@ spaces:
             name: bucket_id
             type: unsigned
         temporary: false
-        engine: memtx
+        engine: vinyl
         is_local: false
         sharding_key:
           - id
@@ -654,7 +654,7 @@ spaces:
         name: bucket_id
         type: unsigned
     temporary: false
-    engine: memtx
+    engine: vinyl
     is_local: false
     sharding_key:
       - id
@@ -682,7 +682,7 @@ spaces:
         name: bucket_id
         type: unsigned
     temporary: false
-    engine: memtx
+    engine: vinyl
     is_local: false
     sharding_key:
       - id
@@ -778,7 +778,7 @@ spaces:
       type: TREE
       name: bucket_id
     is_local: false
-    engine: memtx
+    engine: vinyl
     sharding_key:
     - id
   orig__as2__all_types_table_history:
@@ -868,6 +868,6 @@ spaces:
       type: TREE
       name: bucket_id
     is_local: false
-    engine: memtx
+    engine: vinyl
     sharding_key:
     - id

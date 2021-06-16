@@ -218,7 +218,7 @@ end
 local function storage_space_len(space_name)
     checks('string')
 
-    return box.space[space_name]:len()
+    return box.space[space_name]:count()
 end
 
 local function get_metric()
@@ -497,6 +497,7 @@ local function key_from_tuple(tuple, key_parts)
     return key
 end
 
+local transfer_locks = {}
 
 ---transfer_stage_data_to_scd_table
 ---@param stage_data_table_name string - Name of the table, that contains hot data for scd processing.
@@ -510,6 +511,15 @@ local function transfer_stage_data_to_scd_table(stage_data_table_name, actual_da
     local is_stage_table_ok, err_stage = check_table_for_delta_fields(stage_data_table_name, 'stage')
     local is_data_table_ok, err_data = check_table_for_delta_fields(actual_data_table_name,'actual')
     local is_historical_table_ok, err_hist = check_table_for_delta_fields(historical_data_table_name,'history')
+
+    -- local lock_name = stage_data_table_name..actual_data_table_name..historical_data_table_name
+    -- local transfer_lock = transfer_locks[lock_name]
+    -- if transfer_lock == nil then
+    --     transfer_lock = fiber.channel(1)
+    --     transfer_locks[lock_name] = transfer_lock
+    -- end
+
+    -- transfer_lock:put(true)
 
     if not is_stage_table_ok then
         return false, err_stage
@@ -545,7 +555,7 @@ local function transfer_stage_data_to_scd_table(stage_data_table_name, actual_da
     local hist_data_table = box.space[historical_data_table_name]
 
     local function transfer_function(stage_tuple)
-        box.begin()
+        -- box.begin()
         local actual_tuples = actual_data_table:select(key_from_tuple(stage_tuple,stage_data_pk))
         for _,actual_tuple in ipairs(actual_tuples) do
             if actual_tuple[etl_config.get_date_field_start_nm()] < delta_number then
@@ -562,7 +572,7 @@ local function transfer_stage_data_to_scd_table(stage_data_table_name, actual_da
             actual_data_table:put(actual_data_table:frommap(stage_tuple_map))
         end
         stage_data_table:delete(key_from_tuple(stage_tuple,stage_data_pk))
-        box.commit()
+        -- box.commit()
     end
 
     local res, err = err_storage:pcall(
@@ -571,10 +581,12 @@ local function transfer_stage_data_to_scd_table(stage_data_table_name, actual_da
                     space = stage_data_table;
                     actor = transfer_function;
                     pause = etl_config.get_transfer_pause_rows_cnt() or 100;
-                    txn = false;
+                    txn = true;
                 }
                 return true, nil
             end)
+
+    -- transfer_lock:get()
 
     if err ~= nil then
         log.error(err.trace)
