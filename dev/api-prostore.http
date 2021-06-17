@@ -1,0 +1,96 @@
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b4",
+  "datamartMnemonic": "",
+  "sql": "CREATE DATABASE adg_test",
+  "parameters": null
+}
+
+###
+
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b5",
+  "datamartMnemonic": "",
+  "sql": "CREATE TABLE adg_test.env_test (ID BIGINT, gos_number varchar, constraint PK_id PRIMARY KEY(ID)) DISTRIBUTED BY (id);",
+  "parameters": null
+}
+
+###
+
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b8",
+  "datamartMnemonic": "",
+  "sql": "create upload external  table adg_test.env_testEx (ID BIGINT, gos_number varchar) LOCATION 'kafka://p1-adsk-01:2181/env_test' FORMAT 'AVRO';",
+  "parameters": null
+}
+
+###
+
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b4",
+  "datamartMnemonic": "",
+  "sql": "USE adg_test",
+  "parameters": null
+}
+
+###
+
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b4",
+  "datamartMnemonic": "",
+  "sql": "BEGIN DELTA",
+  "parameters": null
+}
+
+###
+
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b4",
+  "datamartMnemonic": "",
+  "sql": "INSERT INTO adg_test.env_test SELECT * FROM adg_test.env_testEx;",
+  "parameters": null
+}
+
+###
+
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b4",
+  "datamartMnemonic": "",
+  "sql": "COMMIT DELTA;",
+  "parameters": null
+}
+
+###
+
+POST http://172.17.38.181:9090/query/execute
+Content-Type: application/json; charset=UTF-8
+
+{
+  "requestId": "79526f64-2805-41b5-852a-5447a5ce43b8",
+  "datamartMnemonic": "",
+  "sql": "DROP DATABASE adg_test",
+  "parameters": null
+}
+
+###
+

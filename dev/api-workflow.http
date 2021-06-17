@@ -245,32 +245,58 @@ POST http://localhost:8081/api/v1/ddl/table/queuedCreate
 }
 ###
 
+POST http://localhost:8081/api/v1/kafka/subscription
+
+{
+    "topicName": "TEST",
+    "consumerGroupName": "tarantool",
+    "spaceNames": [
+        "adb__adg_test__env_test_staging"
+    ],
+    "maxNumberOfMessagesPerPartition": 100,
+    "avroSchema": {
+        "type": "record",
+        "name": "env_test",
+        "fields": [
+            {
+                "name": "id",
+                "type": "long"
+            },
+            {
+                "name": "gos_number",
+                "type": "string"
+            }
+        ]
+    },
+    "callbackFunction": {
+        "callbackFunctionName": "transfer_data_to_scd_table_on_cluster_cb",
+        "callbackFunctionParams": {
+            "_space": "adb__adg_test__env_test_staging",
+            "_stage_data_table_name": "adb__adg_test__env_test_staging",
+            "_actual_data_table_name": "adb__adg_test__env_test_actual",
+            "_historical_data_table_name": "adb__adg_test__env_test_history",
+            "_delta_number": 40
+        },
+        "maxNumberOfMessagesPerPartition": 200,
+        "maxIdleSecondsBeforeCbCall": 100
+    }
+}
+
+###
+
 GET http://localhost:8081/api/etl/transfer_data_to_scd_table?_stage_data_table_name=adb__adg_test__env_test_staging&_actual_data_table_name=adb__adg_test__env_test_actual&_historical_data_table_name=adb__adg_test__env_test_history&_delta_number=100
 
 ###
 
 POST http://localhost:8081/api/v1/ddl/table/schema
 
-{"spaces":["adb__adg_test__env_test_actual","adb__adg_test__env_test_actual","adb__adg_test__env_test_staging"]}
-
-###
-
-# возможно вызывать с callback чтобы сразу запустить загрузку данных через /kafka/subscription:
-# example 3 в спецификации opeapi 
-POST http://localhost:8081/api/v1/kafka/subscription
-
-{
-  "topicName": "TEST",
-  "consumerGroupName": "tarantool",
-  "spaceNames": ["adb__adg_test__env_test_staging"],
-  "maxNumberOfMessagesPerPartition": 100
-}
+{"spaces":["adb__adg_test__env_test_actual","adb__adg_test__env_test_history","adb__adg_test__env_test_staging"]}
 
 ###
 
 POST http://localhost:8081/api/v1/kafka/dataload
 
-{"topicName":"test","spaces":["env_test_staging"]}
+{"topicName":"test","spaces":["adb__adg_test__env_test_staging"]}
 
 ###
 
